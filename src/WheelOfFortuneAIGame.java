@@ -4,14 +4,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortunePlayer{
     private String player;
     private int maxGuess = 15;
-    private int phraseLength;
     private int index = 0;
-    private int indexOfPhrase = 0;
-    private  int indexOfPlayer = 0;
+    private int indexOfPlayer = 0;
     List<String> players = new ArrayList<>();
 
     public WheelOfFortuneAIGame(){
@@ -26,40 +23,21 @@ public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortu
     }
 
     @Override
-    public AllGamesRecord playAll(){
-        AllGamesRecord allGamesRecord = new AllGamesRecord();
-        boolean isContinue = true;
-        int size = phraseList.size();
-        int j = 0;
-
-        for (int i = 0; i < players.size();i++){
-            indexOfPlayer = i;
-            player = playerId();
-
-            while (isContinue){
-                j++;
-                allGamesRecord.add(play());
-                if (size > j) {
-                    isContinue = playNext();
-                } else {
-                    isContinue = false;
-                }
-                reset();
-            }
-            isContinue = true;
-            super.readPhrases();
-            j=0;
-        }
-        return allGamesRecord;
-    }
-
-    @Override
     public boolean playNext() {
-        int size = phraseList.size();
+        int sizeOfPhrase = phraseList.size(); // keep subtracting.
+        int sizeOfPlayers = players.size()-1; // there were a player processed already.
+        int indexOfPhrase = 0;
         boolean isFinish = true;
-        if (size == indexOfPhrase){
-            isFinish = false;
+
+        if (sizeOfPhrase == indexOfPhrase){
+            if(sizeOfPlayers == indexOfPlayer){
+                isFinish = false;
+            }else{
+                super.readPhrases();
+                indexOfPlayer++;
+            }
         }
+        reset();
         return isFinish;
     }
 
@@ -70,10 +48,7 @@ public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortu
         boolean isWin = false;
         String phrase = super.randomPhrase();
         super.generateHiddenPhrase(phrase);
-        phraseLength = phrase.length();
-
-        gameRecord.playerID = player;
-
+        gameRecord.playerID = playerId();
         System.out.println(super.getHiddenPhrases());
 
         while(!outOfRange){
@@ -96,6 +71,7 @@ public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortu
     @Override
     public char nextGuess() {
         String botGuess;
+        int phraseLength = phraseList.size();
         if (phraseLength <= 5){
             botGuess = "aniesorltudpmhcbkgywfvjzxq";
         }else if (phraseLength <= 12) {

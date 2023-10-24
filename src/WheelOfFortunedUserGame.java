@@ -3,50 +3,34 @@ import java.util.Scanner;
 public class WheelOfFortunedUserGame extends WheelOfFortune{
     Scanner scanner = new Scanner(System.in);
     private int maxGuess = 15;
-    String playerId = null;
-
-
-    @Override
-    public AllGamesRecord playAll() {
-        AllGamesRecord allGamesRecord = new AllGamesRecord();
-        int size = super.phraseList.size();
-        boolean isContinue = true;
-        int index = 0;
-
-        System.out.println("Enter your Player ID: ");
-        playerId = scanner.next();
-
-        while (isContinue) {
-            index++;
-            allGamesRecord.add(play());
-            if (size > index) {
-                isContinue = playNext();
-            } else {
-                isContinue = false;
-            }
-            reset();
-        }
-        return allGamesRecord;
-    }
+    private String playerId = null;
+    private boolean isFirstPlay = true;
+    private int index = 0;
 
     @Override
     public boolean playNext() {
-        System.out.println("Do you want to continue?(y/n)");
         Scanner scanner = new Scanner(System.in);
         boolean contue = false;
         boolean loop = true;
         char chr;
-        while(loop){
-            chr = scanner.nextLine().charAt(0);
-            if(chr =='y'||chr=='Y'){
-                contue = true;
-                loop = false;
-            } else if (chr=='n'||chr=='N') {
-                loop = false;
-            } else{
-                System.out.println("Invalid Input. Please Enter y or n: ");
+        int size = phraseList.size();
+
+        if(size >= index){
+            System.out.println("Do you want to continue?(y/n)");
+            while(loop){
+                chr = scanner.nextLine().charAt(0);
+                if(chr =='y'||chr=='Y'){
+                    contue = true;
+                    loop = false;
+                } else if (chr=='n'||chr=='N') {
+                    loop = false;
+                } else{
+                    System.out.println("Invalid Input. Please Enter y or n: ");
+                }
             }
+            index++;
         }
+        reset();
         return contue;
     }
 
@@ -57,6 +41,11 @@ public class WheelOfFortunedUserGame extends WheelOfFortune{
         boolean isWin = false;
         String phrase = super.randomPhrase();
         super.generateHiddenPhrase(phrase);
+        if(isFirstPlay){
+            System.out.println("Enter your Player ID: ");
+            playerId = scanner.next();
+            isFirstPlay = false;
+        }
 
         gameRecord.playerID = playerId;
 
