@@ -14,7 +14,6 @@ public abstract class WheelOfFortune extends Game{
     protected abstract char getGuess();
 
     protected List<String> readPhrases(){
-
         // Get the phrase from a file of phrases
         try {
             phraseList = Files.readAllLines(Paths.get("phrases.txt"));

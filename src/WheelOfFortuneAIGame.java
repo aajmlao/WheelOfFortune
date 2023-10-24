@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortunePlayer{
-    private String player;
     private int maxGuess = 15;
     private int index = 0;
     private int indexOfPlayer = 0;
     List<String> players = new ArrayList<>();
 
     public WheelOfFortuneAIGame(){
-        this.player = "AA8687";
+        players.add("AA8687");
     }
     public WheelOfFortuneAIGame(String player){
-        this.player = player;
+        players.add(player);
     }
     public WheelOfFortuneAIGame(List<String> players){
        this.players = players;
@@ -118,10 +117,11 @@ public class WheelOfFortuneAIGame extends WheelOfFortune implements WheelOfFortu
         WheelOfFortuneAIGame wf = new WheelOfFortuneAIGame(playerList);
         AllGamesRecord record = wf.playAll();
 
+        System.out.println(record.average());
         System.out.println("This is an average: "+record.average("KK8687"));
         System.out.println("This is an average: "+record.average("JJ8687"));
         System.out.println("This is an average: "+record.average("AA8687"));
-        for (GameRecord gamesRecord: record.highGameList("AA8687",3)){
+        for (GameRecord gamesRecord: record.highGameList(3)){
             System.out.println(gamesRecord.playerID);
             System.out.println(gamesRecord.score);
         }
